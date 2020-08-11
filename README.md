@@ -68,8 +68,11 @@ Create an API here https://console.developers.google.com/ and update the config 
 No API needed for this. Module scrapes the HTML using BeautifulSoup. 
 
 ## Usage
+Simple enough
 
+python yivo_search.py -k 'url'
 
+![Image of Usage](https://github.com/plushed/Yivo_Search/blob/master/usage.PNG)
 
 ## Extras
 This project can easily be stripped of the SQL DB and ported to a web framework such as Django. 
