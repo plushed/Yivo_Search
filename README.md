@@ -1,7 +1,7 @@
 # Yivo_Search
 
 ## Introduction
-Yivo Search is a tool developed to provide quick analysis of URLs against multiple Open Source Intelligence feeds. Results are stored in a SQlite database and displayed when queried. Current sources include URLScan.io, Google Safe Search API, OpenPhish Feed, Phishtank, Virustotal, and McAfee Web Advisor. I hope to include additional modules in the near future.
+Yivo Search is a tool developed to provide quick analysis of URLs against multiple Open Source Intelligence feeds. Results are stored in a SQlite database and displayed when queried. Current sources include URLScan.io, URLHaus, Google Safe Search API, OpenPhish Feed, Phishtank, Virustotal, and McAfee Web Advisor. I hope to include additional modules in the near future.
 
 ## Setup
 1. Clone or download the repository keeping the observed directory structure then run pip.
@@ -23,7 +23,7 @@ CREATE TABLE "results" (
 4. Edit this line of the yivosearch.py to reflect your db name. db_path = os.path.join(BASE_DIR, "yivohunt.db")
 
 ### Modules
-As described above their are currently 6 different modules to query URLs against.
+As described above their are currently 7 different modules to query URLs against. Please be sure to observe limitations these services place on volume of querying against the APIs in some cases.
 
 #### VirusTotal
 Obtain VT API access
@@ -44,6 +44,11 @@ The file should be in the main directory or update the location referenced in th
 Like the OpenPhish feed Abuse.ch URLHaus offers an option to download a text only list of URLs so no API key is required.  You'll also need to use a script to pull these regularly.
 
 https://urlhaus.abuse.ch/api/
+
+#### URLScan.io
+
+URLScan API information
+https://urlscan.io/about-api/#search
 
 #### Phishtank
 
