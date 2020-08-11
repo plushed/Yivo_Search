@@ -65,6 +65,6 @@ No API needed for this. Module scrapes the HTML using BeautifulSoup.
 ## Extras
 This project can easily be stripped of the SQL DB and ported to a web framework such as Django. 
 
-![Image of Django]()
+![Image of Django](https://github.com/plushed/Yivo_Search/blob/master/django_screen.PNG)
 
 
