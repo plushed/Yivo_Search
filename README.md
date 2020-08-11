@@ -26,13 +26,41 @@ CREATE TABLE "results" (
 As described above their are currently 6 different modules to query URLs against.
 
 #### VirusTotal
+Obtain VT API access
+https://developers.virustotal.com/reference#getting-started
+
+Append to the config.conf
+
 #### OpenPhish
+
+OpenPhish Community only offers downloading of the IOCs via text file and are updated every 12 hours. You can create a simple wget or curl script to run as a cronjob to pull the IOCs.
+
+https://openphish.com/feed.txt
+
+The file should be in the main directory or update the location referenced in the openphish module.
+
 #### AbuseCH
+
+Like the OpenPhish feed Abuse.ch URLHaus offers an option to download a text only list of URLs so no API key is required.  You'll also need to use a script to pull these regularly.
+
+https://urlhaus.abuse.ch/api/
+
 #### Phishtank
+
+Phishtank feed offers an API that you'll need to append to the config file.
+https://www.phishtank.com/api_register.php
+
+The module parses the data from .json format for matching.
+
 #### Google Safe Search
+
+You'll also need a Google Developer API. API information can be found here - https://developers.google.com/safe-browsing/v4
+
+Create an API here https://console.developers.google.com/ and update the config file.
+
 #### McAfee Web Advisor
 
-### Configuration
+No API needed for this. Module scrapes the HTML using BeautifulSoup. 
 
 ## Extras
 This project can easily be stripped of the SQL DB and ported to a web framework such as Django. 
