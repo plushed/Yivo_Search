@@ -67,6 +67,10 @@ Create an API here https://console.developers.google.com/ and update the config 
 
 No API needed for this. Module scrapes the HTML using BeautifulSoup. 
 
+## Usage
+
+
+
 ## Extras
 This project can easily be stripped of the SQL DB and ported to a web framework such as Django. 
 
