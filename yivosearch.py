@@ -11,6 +11,7 @@ from modules.phishtank import phishtank
 from modules.urlscan import urlscan
 from modules.virustotal import vt_main
 from modules.openphish import openphish
+from modules.ibm import xforce
 
 VERSION = "0.1"
 
@@ -53,10 +54,10 @@ def input_type(args):
         return False
 
 
-def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result):
+def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, ibm_result):
     # Connecting to sqlite
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "yourdbname.db")
+    db_path = os.path.join(BASE_DIR, "yivohunt.db")
     conn = sqlite3.connect(db_path)
     # Creating a cursor object using the cursor() method
     cursor = conn.cursor()
@@ -69,14 +70,14 @@ def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result,
     now = datetime.now()
     created_time = now.strftime("%m/%d/%Y %H:%M:%S")
     # Insert Results
-    cursor.execute('INSERT INTO results (created_time, value, engine_urlscan, engine_googlesafe, engine_webadvisor, engine_phishtank, engine_virustotal, engine_openphish ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                   (created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result))
+    cursor.execute('INSERT INTO results (created_time, value, engine_urlscan, engine_googlesafe, engine_webadvisor, engine_phishtank, engine_virustotal, engine_openphish, engine_ibm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                   (created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, ibm_result))
     conn.commit()
     print("Records inserted........")
     # Closing the connection
     conn.close()
     results = [created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result,
-               openphish_result]
+               openphish_result, ibm_result]
     print(results)
 
 #####################################
@@ -93,11 +94,18 @@ def main():
             config = configparser.ConfigParser()
             config.read(conf)
             # Config.sections()
-            # Assigned URLSCAN variables
+            # Assign URLscan variables
             urlscan_url = config.get('URLSCAN', 'api_url')
+            # Assign Gsafe variables
             gsafe_url = config.get('GOOGLESAFE', 'api_url')
             gsafe_key = config.get('GOOGLESAFE', 'api_key')
+            # Assign IBM variables
+            ibm_url = config.get('IBM', 'api_url')
+            ibm_key = config.get('IBM', 'api_key')
+            ibm_pass = config.get('IBM', 'api_password')
+            # Assign McAfee variables
             websafe_url = config.get('WEBSAFE', 'api_url')
+            # Assign Phishtank variables
             phishtank_url = config.get('PHISHTANK', 'api_url')
             phishtank_key = config.get('PHISHTANK', 'api_key')
             # Assigned VT variables
@@ -120,6 +128,7 @@ def main():
         urlscan(urlscan_url, args)
         googlesafe(gsafe_url, gsafe_key, args)
         webadvisor(websafe_url, args)
+        xforce(ibm_url, ibm_key, ibm_pass, args)
         vt_main(vt_url, vt_api, args, search_type)
         openphish(args)
         # Assign function returned results to variables #
@@ -129,9 +138,10 @@ def main():
         phishtank_result = phishtank(args)
         vt_result = vt_main(vt_url, vt_api, args, search_type)
         openphish_result = openphish(args)
+        ibm_result = xforce(ibm_url, ibm_key, ibm_pass, args)
 
         # Call DB_Commit Function and pass results #
-        db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result)
+        db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result,ibm_result)
 
 
 if __name__ == '__main__':
