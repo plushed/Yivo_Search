@@ -1,9 +1,8 @@
-
-
 def openphish(args):
     args.k = args.k.rstrip("/")
+    args.k = args.k.lstrip('http://')
+    args.k = args.k.lstrip('https://')
     # Perform get request
-    value = args.k
     with open('./feed.txt', "r", newline='') as file:
         for line in file:
             line = line.rstrip()
