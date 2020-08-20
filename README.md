@@ -1,7 +1,7 @@
 # Yivo_Search
 
 ## Introduction
-Yivo Search is a tool developed to provide quick analysis of URLs against multiple Open Source Intelligence feeds. Results are stored in a SQlite database and displayed when queried. Current sources include URLScan.io, URLHaus, Google Safe Search API, OpenPhish Feed, Phishtank, Virustotal, and McAfee Web Advisor. I hope to include additional modules in the near future.
+Yivo Search is a tool developed to provide quick analysis of URLs against multiple Open Source Intelligence feeds. Results are stored in a SQlite database and displayed when queried. Current sources include URLScan.io, URLHaus, Google Safe Search API, OpenPhish Feed, Phishtank, Virustotal, IBM X-Force and McAfee Web Advisor. I hope to include additional modules in the near future.
 
 ## Setup
 1. Clone or download the repository keeping the observed directory structure then run pip.
@@ -25,7 +25,7 @@ CREATE TABLE "results" (
 4. Edit this line of the yivosearch.py to reflect your db name. db_path = os.path.join(BASE_DIR, "yivohunt.db")
 
 ### Modules
-As described above their are currently 7 different modules to query URLs against. Please be sure to observe limitations these services place on volume of querying against the APIs in some cases.
+As described above their are currently 8 different modules to query URLs against. Please be sure to observe limitations these services place on volume of querying against the APIs in some cases.
 
 #### VirusTotal
 Obtain VT API access
@@ -68,6 +68,12 @@ Create an API here https://console.developers.google.com/ and update the config 
 #### McAfee Web Advisor
 
 No API needed for this. Module scrapes the HTML using BeautifulSoup. 
+
+#### IBM X-Force
+
+You'll need an API key and password. Instructions for generating can be found here.
+
+https://exchange.xforce.ibmcloud.com/api/doc/?#auth
 
 ## Usage
 Simple enough
