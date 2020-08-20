@@ -17,7 +17,9 @@ CREATE TABLE "results" (
 	"engine_webadvisor"	TEXT,
 	"engine_phishtank"	TEXT,
 	"engine_virustotal"	TEXT,
-	"engine_openphish"	TEXT
+	"engine_openphish"	TEXT,
+	"engine_urlhaus"	TEXT,
+	"engine_ibm"		TEXT
 )
 
 4. Edit this line of the yivosearch.py to reflect your db name. db_path = os.path.join(BASE_DIR, "yivohunt.db")
