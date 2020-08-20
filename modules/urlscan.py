@@ -1,9 +1,11 @@
 import requests
+import urllib3
 
 def urlscan(urlscan_url, args):
     try:
             # Make API call
-        url = requests.get(urlscan_url + args.k)
+        urllib3.disable_warnings()
+        url = requests.get(urlscan_url + args.k, verify = False)
         with url as result:
         # Check web response
             if result.status_code == 200:
