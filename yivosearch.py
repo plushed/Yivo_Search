@@ -11,6 +11,7 @@ from modules.phishtank import phishtank
 from modules.urlscan import urlscan
 from modules.virustotal import vt_main
 from modules.openphish import openphish
+from modules.abusech import abusech
 from modules.ibm import xforce
 
 VERSION = "0.1"
@@ -54,7 +55,7 @@ def input_type(args):
         return False
 
 
-def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, ibm_result):
+def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, abusech_result, ibm_result):
     # Connecting to sqlite
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(BASE_DIR, "yivohunt.db")
@@ -66,18 +67,19 @@ def db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result,
     urlscan_result = str(urlscan_result)
     openphish_result = str(openphish_result)
     gsafe_result = str(gsafe_result)
+    abusech_result = str(abusech_result)
     # datetime object containing current date and time
     now = datetime.now()
     created_time = now.strftime("%m/%d/%Y %H:%M:%S")
     # Insert Results
-    cursor.execute('INSERT INTO results (created_time, value, engine_urlscan, engine_googlesafe, engine_webadvisor, engine_phishtank, engine_virustotal, engine_openphish, engine_ibm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                   (created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, ibm_result))
+    cursor.execute('INSERT INTO results (created_time, value, engine_urlscan, engine_googlesafe, engine_webadvisor, engine_phishtank, engine_virustotal, engine_openphish, engine_urlhaus, engine_ibm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                   (created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, abusech_result, ibm_result))
     conn.commit()
     print("Records inserted........")
     # Closing the connection
     conn.close()
     results = [created_time, args.k, urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result,
-               openphish_result, ibm_result]
+               openphish_result, abusech_result, ibm_result]
     print(results)
 
 #####################################
@@ -94,18 +96,18 @@ def main():
             config = configparser.ConfigParser()
             config.read(conf)
             # Config.sections()
-            # Assign URLscan variables
+            # Assigned URLSCAN variables
             urlscan_url = config.get('URLSCAN', 'api_url')
-            # Assign Gsafe variables
+            # Assigned GSafe variables
             gsafe_url = config.get('GOOGLESAFE', 'api_url')
             gsafe_key = config.get('GOOGLESAFE', 'api_key')
-            # Assign IBM variables
+            # Assigned Xforce variables
             ibm_url = config.get('IBM', 'api_url')
             ibm_key = config.get('IBM', 'api_key')
             ibm_pass = config.get('IBM', 'api_password')
-            # Assign McAfee variables
+            # Assigned Websafe variables
             websafe_url = config.get('WEBSAFE', 'api_url')
-            # Assign Phishtank variables
+            # Assigned Phishtank variables
             phishtank_url = config.get('PHISHTANK', 'api_url')
             phishtank_key = config.get('PHISHTANK', 'api_key')
             # Assigned VT variables
@@ -131,17 +133,25 @@ def main():
         xforce(ibm_url, ibm_key, ibm_pass, args)
         vt_main(vt_url, vt_api, args, search_type)
         openphish(args)
+        abusech(args)
         # Assign function returned results to variables #
         urlscan_result = urlscan(urlscan_url, args)
         gsafe_result = googlesafe(gsafe_url, gsafe_key, args)
         webadvisor_result = webadvisor(websafe_url, args)
         phishtank_result = phishtank(args)
         vt_result = vt_main(vt_url, vt_api, args, search_type)
-        openphish_result = openphish(args)
         ibm_result = xforce(ibm_url, ibm_key, ibm_pass, args)
+        if openphish(args):
+            openphish_result = "True"
+        else:
+            openphish_result = "False"
+        if abusech(args):
+            abusech_result = "True"
+        else:
+            abusech_result = "False"
 
         # Call DB_Commit Function and pass results #
-        db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result,ibm_result)
+        db_commit(urlscan_result, gsafe_result, webadvisor_result, phishtank_result, vt_result, openphish_result, abusech_result, ibm_result)
 
 
 if __name__ == '__main__':
